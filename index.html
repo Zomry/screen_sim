@@ -1,0 +1,145 @@
+<html>
+<head>
+
+	<title>Screenreader-test</title>
+	<meta charset="UTF-8">
+	<style>
+		:focus {
+			border: 2px dashed red;
+			background-color: pink;
+		}
+	</style>
+</head>
+<body>
+	<img src="a8f962cio.png" alt="Good dancer">
+	<img src="a8f962cio.png">
+
+	<br>
+	<input type="text" placeholder="Your username"><br>
+	<input type="password" placeholder="Keep it secret">
+
+	<a href="#" title="Find more about. ">testing</a><br>
+	<button>Click me!</button>
+	<ul tabindex="70">
+		<li>Alt textes</li>
+			<ol>
+				<li>Some demo</li>
+				<li>More demo</li>
+				<li>Another demo</li>
+			</ol>
+		<li>Lang attributes</li>
+		<li>Placeholders or no placeholders</li>
+		<li>Switching between modes</li>
+	</ul>
+
+
+	<script>
+	window.onload = function() {
+		var voices = window.speechSynthesis.getVoices();
+		
+		var all = document.body.querySelectorAll("*");
+			all = Array.prototype.slice.call(all); // converteren naar echte array
+
+		for(var i = 0; i < all.length; i++) {
+			if(all[i].nodeName == "BR" || all[i].type == "hidden") {
+				all.splice(i, 1);
+				i--;
+				console.log("br gefilterd");
+			} else {
+				all[i].tabIndex = i+1;
+				console.log("goedgekeurd op");
+				console.log(all[i].tabindex);
+
+				console.log(all[i]);
+			}
+		}
+
+		// for(var i = 0; i < )
+
+		for(var i = 0; i < all.length; i++) {
+			all[i].addEventListener("focus", synthesize, false);
+		}
+
+		function synthesize(e) {
+			var msg = new SpeechSynthesisUtterance();
+			msg.voice = voices[4]; // Note: some voices don't support altering params
+			msg.voiceURI = 'native';
+			msg.volume = 1; // 0 to 1
+			msg.rate = 1; // 0.1 to 10
+			msg.pitch = 2; //0 to 2
+			msg.text = elemName(e.path[0]) + ". " + elemContent(e.path[0]);
+			console.log(msg.text);
+			msg.lang = 'en-UK';
+			speechSynthesis.speak(msg);
+
+
+		// msg.onend = function(e) {
+  // 			console.log('Finished in ' + event.elapsedTime + ' seconds.');
+		// };
+
+
+
+
+		}
+
+		function elemName(elem) {
+			var name = elem.nodeName;
+			switch(name) {
+				case "A":
+					return "Anchor";
+				case "INPUT":
+					return "Input " + elem.type || "Text";
+				case "LI":
+					return "List item";
+				case "IMG":
+					return "Image";
+				case "BUTTON":
+					return "Button";
+				case "UL":
+					return "Unordered list";
+				case "OL":
+					return "Ordered list";
+			}
+
+			return name; // fallback
+		}
+
+		function elemContent(elem) {
+			if(elem.nodeName == "INPUT") {
+				console.log("lalala");
+				return elem.placeholder;
+			}
+
+			if(elem.nodeName == "UL" || elem.nodeName == "OL") {
+				return elem.getElementsByTagName("li").length + " items";
+			}
+
+
+			if(elem.nodeName == "IMG") {
+				if(elem.alt != "") 	{
+					return elem.alt;
+				} else {
+					var src = elem.src; // will contain the full path
+
+					if(src.indexOf('/') >= 0) {
+					   src = src.substring(src.lastIndexOf('/')+1);
+					}
+					return src;
+				}
+			}
+
+			if(elem.nodeName == "A") {
+				return elem.title + elem.innerText;
+			}
+
+			if(elem.outerText != undefined || elem.outerText == "") {
+				return elem.outerText;
+			}
+			
+			return "No content provided";
+		}
+	};
+
+	</script>
+</body>
+</html>
