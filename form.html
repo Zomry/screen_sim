@@ -1,0 +1,43 @@
+<html>
+<head>
+
+	<title>Screenreader-test</title>
+	<meta charset="UTF-8">
+	<style>
+		body {
+			background-color: lightblue;
+		}
+
+		:focus {
+			border: 2px dashed red;
+			background-color: pink;
+		}
+
+		#fake-button {
+			background-color: gray;
+			display: inline-block;
+			padding: 15px;
+		}
+	</style>
+</head>
+<body>
+
+	<h1>Accessibility demo</h1>
+	<h2>Images</h2>
+
+	<h3>Image with alt-attribute</h3>
+	
+	<label for="label">With label</label>
+	<input id="label" placeholder="may come with placeholder" value="test"><br> <!-- label / type / placeholder / text -->
+	<input value="with content"><br>
+	<input placeholder="With placeholder"><br>
+	<textarea></textarea><br>
+	<textarea>With content</textarea><br>
+	<textarea placeholder="With placeholder"></textarea><br>
+	<input disabled placeholder="Disabled"><br>
+	<textarea disabled placeholder="Disabled"></textarea><br>
+	<input type="password" value="it is secret"><br>
+
+	<script src="screen-lib.js"></script>
+</body>
+</html>

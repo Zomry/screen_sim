@@ -4,27 +4,51 @@
 	<title>Screenreader-test</title>
 	<meta charset="UTF-8">
 	<style>
+		body {
+			background-color: lightblue;
+		}
+
 		:focus {
 			border: 2px dashed red;
 			background-color: pink;
 		}
+
+		#fake-button {
+			background-color: gray;
+			display: inline-block;
+			padding: 15px;
+		}
 	</style>
 </head>
 <body>
+
+	<h1>Accessibility demo</h1>
+	<h2>Images</h2>
+
+	<h3>Image with alt-attribute</h3>
 	<img src="a8f962cio.png" alt="Good dancer">
+
+	<h3>Image without alt-attribute</h3>
 	<img src="a8f962cio.png">
 
-	<br>
-	<input type="text" placeholder="Your username"><br>
+	<h3>Image with alt-attribute and longdesc</h3>
+	<img src="a8f962cio.png" alt="Some dancer" longdesc="long.html">
+
+
+	<h2>Inputfields</h2>
+	<input placeholder="Your username"><br>
 	<input type="password" placeholder="Keep it secret">
 	<br>
-	<a href="#" title="Find more about">testing</a>
+	<a href="#" title="Find more about">testing</a><br>
 	<a href="#">this</a><br>
 	<a href="#">now</a><br>
 	<a href="#">out</a><br>
-	<a href="#">alright!</a>
-	<button>Click me!</button>
-	<ul tabindex="70">
+	<a href="#">alright!</a><br>
+	<button>Click me first</button>
+	<button>Click me second</button>
+	<button>Click me third</button>
+	<button>Click me last!</button>
+	<ul>
 		<li>Alt textes</li>
 			<ol>
 				<li>Some demo</li>
@@ -35,6 +59,8 @@
 		<li>Placeholders or no placeholders</li>
 		<li>Switching between modes</li>
 	</ul>
+
+	<div id="fake-button" aria-role="button">Click me!</div>
 
 
 	<script src="screen-lib.js"></script>
