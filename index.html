@@ -1,0 +1,87 @@
+<html>
+<head>
+	<title>Screenreader-test</title>
+	<meta charset="UTF-8">
+	<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" href="demo.css">
+</head>
+
+<body>
+	<header>
+		<nav>
+			<ul>
+				<li><a href="index.html">Manual page</a></li>
+				<li><a href="images.html">Images demo</a></li>
+				<li><a href="form.html">Form demo</a></li>
+				<li><a href="table.html">Table demo</a></li>
+		</nav>
+	</header>
+
+	<div class="clearer" aria-visible="false"></div>
+	<div id="main" role="main">
+		<h1>Manual</h1>
+		<h2>Introduction</h2>
+		<p>This is a proof-of-concept screen reader simulation developed for Chrome intended to inspire web developers to learn more about assistive technology. It uses the speech synthesis build in Chrome 32+ to give an impression how a screen reader might work. This screen reader was inspired by an interpretation of <abbr title="Non Visual Desktop Access">NVDA</abbr> and VoiceOver (iOs, OS X). Note though that this is still scratching the surface and that a screen reader is a lot more complex - real websites too. To really start with testing for web accessibility, take some time to learn how a real screenreader works. Some screen readers are: NVDA, VoiceOver, JAWS, Windows Eyes and Supernova. 
+		<h2>Features</h2>
+		<p>This simulation supports:</p>
+		<ul>
+			<li>Navigation with mouse over on:</li>
+			<ol>
+				<li>Hyperlinks</li>
+				<ul>
+					<li>Type: link</li>
+					<li>Text</li>
+				</ul>
+				<li>Ordered and unordered lists</li>
+				<ul>
+					<li>Type: ordered or unordered</li>
+					<li>Amount of list items and sub-list items</li>
+					<li>Focus per individual list item</li>
+				</ul>
+				<li>Input-fields, textarea</li>
+				<ul>
+					<li>Type: edit</li>
+					<li>Label, if provided</li>
+					<li>Type of input field</li>
+					<li>Value, or if not provided, placeholder</li>
+				</ul>
+				<li>Images (graphic)</li>
+					<ul>
+						<li>Type: graphics</li>
+						<li>Says alt-attribute, otherwise file name</li>
+						<li>If longdesc is available, it will give option for that (with enter).</li>
+					</ul>
+				<li>Heading level 1, 2, 3</li>
+					<ul>
+						<li>Headings will read their level as part of the accessible name</li>
+					</ul>
+				<li>Table, table heads and table cells</li>
+					<ul>
+						<li>Tables will tell how many columns and rows it has.</li>
+						<li>If provided, the table will also read its caption</li>
+						<li>When possible, the table data will give the table head as extra information for the table data</li>
+					</ul>
+				<li>Paragraphs</li>
+			</ol>
+		</ul>
+
+		<h2>Navigation</h2>
+		<ul>
+			<li>ESC: toggle voice on or off</li>
+			<li>k: next hyperlink</li>
+			<li>i: next list item</li>
+			<li>e: next input-field, textarea</li>
+			<li>1, 2 or 3 for next headers of corresponding level</li>
+			<li>t: next table</li>
+		</ul>
+		<p><strong>Note</strong>: all of the above also support previous type of. Press shift-key while typing one of the above commands.</p>
+
+	</div>
+
+	<footer>
+		Copyright Zomry 2015
+	</footer>
+
+	<script src="screen-lib.js"></script>
+</body>
+</html>

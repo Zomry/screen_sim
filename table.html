@@ -1,0 +1,79 @@
+<html>
+<head>
+
+	<title>Screenreader-test</title>
+	<meta charset="UTF-8">
+	<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" type="text/css" href="demo.css">
+</head>
+<body>
+	<header>
+		<nav>
+			<ul>
+				<li><a href="screenreader.html">Manual page</a></li>
+				<li><a href="images.html">Images demo</a></li>
+				<li><a href="form.html">Form demo</a></li>
+				<li><a href="table.html">Table demo</a></li>
+		</nav>
+	</header>
+
+	<div class="clearer" aria-visible="false"></div>
+	<div id="main" role="main">
+
+	<h1>Accessibility demo</h1>
+
+	<h2>Table with th, thead and tbody</h2>
+	<table>
+		<caption>My awesome neighbours</caption>
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Education</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Matthew</td>
+				<td>Teacher</td>
+			</tr>
+			<tr>
+				<td>Jan</td>
+				<td>Architect</td>
+			</tr>
+			<tr>
+				<td>David</td>
+				<td>Web Developer</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h2>Table without th, thead and tbody</h2>
+
+	<table>
+		<tr>
+			<td>Fruit</td>
+			<td>Color</td>
+		</tr>
+		<tr>
+			<td>Banana</td>
+			<td>Yellow</td>
+		</tr>
+		<tr>
+			<td>Strawberry</td>
+			<td>Red</td>
+		</tr>
+		<tr>
+			<td>Pear</td>
+			<td>Green</td>
+		</tr>
+	</table>
+</div>
+
+	<footer>
+		Copyright Zomry 2015
+	</footer>
+
+	<script src="screen-lib.js"></script>
+</div>
+</body>
+</html>

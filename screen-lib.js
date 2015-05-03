@@ -1,5 +1,9 @@
 window.onload = function() {
-	var voiceIsOn = false;
+	var descriptionDetails = {
+		location: "longdesc.html",
+		allowed: true
+	}
+
 	var voices = window.speechSynthesis.getVoices();
 	var arrayTypes = {}; // caching-container to keep the adequate elements of the types
 
@@ -8,7 +12,6 @@ window.onload = function() {
 		mode: null,
 		lastNode: null
 	}
-
 	//document.getElementById("fake-button").attributes["aria-role"]
 	
 	var keys = {
@@ -29,43 +32,93 @@ window.onload = function() {
 		s: 83, // to next seperator
 		m: 77, // to next frame
 		g: 71, //  to next graphic,
-		1: 97,
+		1: 97, // headers
 		2: 98,
 		3: 99,
 		4: 100,
 		5: 101,
-		6: 102
+		6: 102,
+		esc: 27 // mute, unmute
 	};
+
+	var goTypes = [
+		"a",
+		"button",
+		"ul",
+		"li",
+		"input",
+		"textarea",
+		"img",
+		"h1",
+		"h2",
+		"h3",
+	];
 
 	types("a");
 	types("button", "button");
 	types("ul");
+	types("ol");
 	types("li");
-	types("input, textarea");
+	types(["input", "textarea"]);
 	types("img");
-	types("h1", "header");
-	types("h2", "header");
-	types("h3", "header");
+	types("h1", "heading");
+	types("h2", "heading");
+	types("h3", "heading");
+	types("table");
+	types("th");
+	types("td");
+	types(["p", "article", "aside", "details", "header", "main", "mark", "nav", "section", "summary", "span",  "label"]);
+
+	// types("*");
 	// types("div");
 
+	/* landmarks
+		banner
+		complementary
+		contentinfo
+		form
+		main
+		navigation
+		search
+	*/
+
+	function heightDocument() { // source: http://stackoverflow.com/questions/1145850/how-to-get-height-of-entire-document-with-javascript
+		var body = document.body, html = document.documentElement;
+		return Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight,html.offsetHeight);
+	}
+
+
+
+
+
+	var textBalloon = document.createElement("div"); // visual feedback to user
+	textBalloon.style.maxWidth = "90%";
+	textBalloon.style.position = "absolute";
+	textBalloon.style.color = "white";
+	textBalloon.style.padding = "3px";
+	textBalloon.style.boxShadow = "rgb(0, 0, 0) 2px 2px 9px";
+	textBalloon.style.backgroundColor = "rgb(17, 153, 153)";
+	textBalloon.style.display = "none";
+
+	document.body.appendChild(textBalloon);
 	document.body.onkeyup = navigate;
 
 	function navigate(e) {
 		switch(e.which) {
 			case keys.k: // regular link
-				switchElem("anchor", "a", e);
+				switchElem("link", "a", e);
 				break;
 			case keys.i: // list item
-				switchElem("li", "li", e);
+				switchElem("list item", "li", e);
 				break;
 			case keys.b: // button
 				switchElem("button", "button", e);
 				break;
 			case keys.g:
-				switchElem("img", "img", e);
+				switchElem("graphic", "img", e);
 				break;
 			case keys.e:
-				switchElem("input, textarea", "input", e);
+				switchElem("edit", "input", e);
 				break;
 			case keys["1"]:
 			case keys["2"]:
@@ -74,7 +127,18 @@ window.onload = function() {
 			case keys["5"]:
 			case keys["6"]:
 				switchElem("header", "H" + e.which, e);
-			// etc
+				break;
+			case keys.esc:
+				options.voiceOn = !options.voiceOn;
+				if(options.voiceOn) {
+					handleSpeaking("Voice on");
+				} else {
+					handleSpeaking("Voice off");
+				}
+				break;
+			case keys.t:
+				switchElem("table", "table", e);
+				break;
 		}
 	}
 
@@ -97,21 +161,30 @@ window.onload = function() {
 			nextNode.focus();
 		} else {
 			(e.shiftKey) 
-				? handleSpeaking("No previous " + newMode)
-				: handleSpeaking("No next " + newMode);
+				? handleSpeaking("No previous " + newMode, e)
+				: handleSpeaking("No next " + newMode, e);
 		}
 	}
 
 
+	function unFocusElem (elem) {
+		var c = elem.path[0];
+			c.tabIndex = c.dataset.tabIndex;
+			c.blur();
+
+			textBalloon.style.display = "none";
+	}
+
 	function focusElem(elem) {
 		var c = elem.path[0];
-			c.tabIndex = -999;
+			// c.data-tabIndex = c.tabIndex || "";
+			c.tabIndex = -1;
 			c.focus();
+			textBalloon.style.display = "block";
 	}
 
 	function types(selector, ariaRole) {
 		var all, query = "";
-		var all2;
 
 		if(typeof selector == "string") {
 			query += selector;
@@ -119,30 +192,43 @@ window.onload = function() {
 				query += ", [aria-role=" + ariaRole + "]";
 			}
 
-			all = document.body.querySelectorAll(query);
-			all = Array.prototype.slice.call(all); //  convert to real array
-
+		} else if (Array.isArray(selector)) { 
+			for(var i = 0, n = selector.length; i < n; i++) {
+				query += selector[i]
+				if(i < n-1) { // if not last of list
+					query += ",";
+				}
+			}
+			
 		}
 
-		if (typeof selector == "array") { // impossible condition, but temporary placeholder
+		all = document.body.querySelectorAll(query);
+		all = Array.prototype.slice.call(all); //  convert to real array
 
-		}
 
 		if(all.length > 0) {
 			for(var i = 0; i < all.length; i++) {
-				all[i].onclick = focusElem;
+				all[i].onmouseover = focusElem;
+				all[i].onmouseout = unFocusElem;
 				all[i].onfocus = synthesize;
+			} if(typeof selector == "string") {
+				arrayTypes[selector] = all; // add to list
+			} else if (Array.isArray(selector)) {
+				arrayTypes[selector[0]] = all; // add to list
 			}
-			arrayTypes[selector] = all; // add to list
 		}
 	}
 
-	function synthesize(e) {
-		handleSpeaking(elemContent(e.path[0]));
+	function toArray (res) {
+	  return Array.prototype.slice.call(res); // convert to real array
 	}
 
-	function handleSpeaking(message) {
+	function synthesize(e) {
+		textBalloon.style.display = "block";
+		handleSpeaking(elemContent(e.path[0]), e);
+	}
 
+	function handleSpeaking(message, e) {
 		if(speechSynthesis.speaking) {
 			speechSynthesis.cancel()
 		}
@@ -157,10 +243,32 @@ window.onload = function() {
 
 		msg.lang = 'en-UK';
 
-		if(voiceIsOn) {
+		if(options.voiceOn) {
 			speechSynthesis.speak(msg);
 			speechSynthesis.resume();	
-		}		
+		}
+
+		textBalloon.innerText = message;
+
+		if(e != null) {
+			var ref = e.path[0];
+			var sumOffsetLeft = 0;
+			var sumOffsetTop = 0;
+
+			do {
+				sumOffsetLeft += ref.offsetLeft;
+				sumOffsetTop += ref.offsetTop;
+				ref = ref.offsetParent;
+
+			} while(ref.nodeName != "BODY") 
+
+			if(heightDocument() - 50 < sumOffsetTop) {
+				sumOffsetTop -= 50;
+			}
+
+			textBalloon.style.left = sumOffsetLeft + 50 +  "px";
+			textBalloon.style.top = sumOffsetTop + 25 + "px";
+		}
 		console.log(message);
 	}
 
@@ -171,7 +279,7 @@ window.onload = function() {
 		"IMG": "graphic",
 		"BUTTON": "button",
 		"LI": "list item",
-		"UL": "Unorder list",
+		"UL": "Unordered list",
 		"OL": "Ordered list",
 		"1": "one",
 		"2": "two",
@@ -181,7 +289,57 @@ window.onload = function() {
 		"6": "six"
 	}
 
+	function findRow(node) { // source: http://stackoverflow.com/questions/13656921/fastest-way-to-find-the-index-of-a-child-node-in-parent
+    var i = 1;
+	    while (node = node.previousSibling) {
+	        if (node.nodeType === 1) { ++i }
+	    }
+    	return i-1;
+	}
+
+	function findNearest(el, tag) { // source: http://stackoverflow.com/questions/18663941/finding-closest-element-without-jquery
+	    while( el && el.tagName && el.tagName !== tag.toUpperCase()) {
+	        el = el.parentNode;     
+	    } return el;
+	} 
+
 	function elemContent(elem) {
+		descriptionDetails.allowed = false; // reset
+
+		if(elem.nodeName == "TABLE") {
+			var theadSet = !!elem.querySelectorAll("thead").length;
+			var tbodySet = !!elem.querySelectorAll("tbody").length; 
+			var caption = elem.querySelector("caption");
+			var rows, text, columns;
+
+			if(theadSet) {
+				rows = elem.querySelectorAll("tbody tr").length;
+			} else {
+				rows = elem.querySelectorAll("tr").length;
+			}
+
+			columns = elem.querySelector("tr").querySelectorAll("td, th").length;
+			text = "table with " + columns + " columns and " + rows + " rows";
+			
+			if(caption) {
+				text += " " + caption.innerText;
+			}
+
+			return text;
+			// return "Table with " + elem.querySelector("table").length + " columns and " + elem.querySelector("tr").length + "rows."
+		}
+
+		if(elem.nodeName == "TD") {
+			var text = "";
+			var index = findRow(elem);
+			var table = findNearest(elem, "table");
+			var hasTableHeader = !!table.querySelectorAll("th").length;
+			if(hasTableHeader) {
+				text += table.querySelectorAll("th")[index].innerText;
+			}
+			text += " " + elem.innerText
+			return text;
+		}
 
 		if(elem.nodeName == "INPUT" || elem.nodeName == "TEXTAREA") {
 			var text = "";
@@ -195,15 +353,49 @@ window.onload = function() {
 
 			text += objNames["INPUT"] + " ";
 
-
 			text += (elem.disabled) ? "unavailable " : " "; // if disabled
-			text += elem.placeholder + " ";
-			text += elem.value + ""; // 
+			if(elem.value) {
+				text += elem.value;
+			} else {
+				text += elem.placeholder;
+			}
 			return text;
 		}
 
 		if(elem.nodeName == "UL" || elem.nodeName == "OL") {
-			return objNames[elem.nodeName] + " " + elem.getElementsByTagName("li").length + " items";
+			console.log(elem.nodeName);
+			var directChildren = 0, subChildrenCount = 0;
+			var children = elem.children;
+			var temp, subChildren, text;
+			temp = toArray(elem.getElementsByTagName("ul"));
+			subChildren = temp.concat(toArray(elem.getElementsByTagName("ol")));
+
+			for(var i = 0, n = children.length; i < n ; i++) {
+				if(children[i].nodeName == "LI") {
+					directChildren++;
+				}
+			}
+
+			if(subChildren.length > 0) {
+				console.log("lengte is " + subChildren.length);
+				for(var i = 0; i < subChildren.length; i++) {
+					var currentListHolder = subChildren[i].children; // ul or ol
+					console.dir(currentListHolder);
+
+					for(var j = 0, n = currentListHolder.length; j < n; j++) {
+						if(currentListHolder[j].nodeName == "LI") {
+							subChildrenCount++;
+						}
+					}
+				}				
+			}
+
+			text = objNames[elem.nodeName] + " " + directChildren + " item(s)";
+			if(subChildrenCount) {
+				text += " and " + subChildrenCount + " subitem(s).";
+			}
+
+			return text;
 		}
 
 
@@ -222,7 +414,16 @@ window.onload = function() {
 				val += src;
 			}
 
-			val += (elem.longDesc != "") ? " Description available. Press enter to listen." : " ";
+			if (elem.longDesc != "") { // no longdesc
+				val += " Description available. Press enter to listen.";
+				descriptionDetails.allowed = true;
+				descriptionDetails.location = elem.longDesc;
+				document.body.addEventListener("keyup", speakDescription);
+			} else { 
+				val += " ";
+			}
+
+
 			return val;
 
 			// if(elem.alt != "") 	{
@@ -241,12 +442,7 @@ window.onload = function() {
 		}
 
 		if(elem.nodeName == "A") {
-			var href = objNames[elem.nodeName] + " " + elem.href;
-
-				if(href.indexOf('/') >= 0) {
-				   href = href.substring(href.lastIndexOf('/')+1) ;
-				}
-			return elem.title + elem.innerText + " location " + href;
+			return objNames[elem.nodeName] + " " + elem.innerText;
 		}
 
 		if(elem.nodeName == "BUTTON") {
@@ -268,5 +464,22 @@ window.onload = function() {
 		}
 
 		return "No content provided"; // if none of above, say this
+	}
+
+	function speakDescription() {
+		document.body.removeEventListener("keyup", speakDescription);
+
+		if(descriptionDetails.allowed) {
+
+		function whenReady () {
+			descriptionDetails.allowed = false;
+			handleSpeaking("Description: " + this.responseText);
+		}
+
+		var xhr = new XMLHttpRequest();
+			xhr.onload = whenReady;
+			xhr.open("get", descriptionDetails.location, true);
+			xhr.send();
+		}
 	}
 };

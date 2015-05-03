@@ -3,41 +3,58 @@
 
 	<title>Screenreader-test</title>
 	<meta charset="UTF-8">
-	<style>
-		body {
-			background-color: lightblue;
-		}
-
-		:focus {
-			border: 2px dashed red;
-			background-color: pink;
-		}
-
-		#fake-button {
-			background-color: gray;
-			display: inline-block;
-			padding: 15px;
-		}
-	</style>
+	<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" type="text/css" href="demo.css">
 </head>
 <body>
+	<header>
+		<nav>
+			<ul>
+				<li><a href="index.html">Manual page</a></li>
+				<li><a href="images.html">Images demo</a></li>
+				<li><a href="form.html">Form demo</a></li>
+				<li><a href="table.html">Table demo</a></li>
+		</nav>
+	</header>
 
-	<h1>Accessibility demo</h1>
-	<h2>Images</h2>
+	<div class="clearer" aria-visible="false"></div>
+	<div id="main" role="main">
 
-	<h3>Image with alt-attribute</h3>
-	
-	<label for="label">With label</label>
-	<input id="label" placeholder="may come with placeholder" value="test"><br> <!-- label / type / placeholder / text -->
-	<input value="with content"><br>
-	<input placeholder="With placeholder"><br>
-	<textarea></textarea><br>
-	<textarea>With content</textarea><br>
-	<textarea placeholder="With placeholder"></textarea><br>
-	<input disabled placeholder="Disabled"><br>
-	<textarea disabled placeholder="Disabled"></textarea><br>
-	<input type="password" value="it is secret"><br>
+		<h1>Accessibility demo</h1>
+		<h2>Images</h2>
+
+		<h3>Image with alt-attribute</h3>
+		<label for="label">Example with label</label><br>
+		<input id="label" placeholder="may come with placeholder" value="test"><br> <!-- label / type / placeholder / text --><br>
+		<span>Example with evil non-label</span><br>
+		<input value="with content"><br><br>
+		<span>Example with placeholder</span><br>
+		<input placeholder="With placeholder"><br><br>
+		<span>Textarea without label or placeholder</span><br>
+		<textarea></textarea><br><br>
+		<span>Span element</span><br>
+		<textarea>With content</textarea><br><br>
+		<span>Textarea with content and placeholder</span><br>
+		<textarea placeholder="With placeholder">Text</textarea><br><br>
+		<span>Example with disabled input</span><br>
+		<input disabled placeholder="Disabled"><br><br>
+		<span>Example with disabled textarea</span><br>
+		<textarea disabled placeholder="Disabled"></textarea><br><br>
+		<span>Span element</span><br>
+		<input type="password" value="it is secret"><br><br>
+
+	<button>Click me first</button>
+	<button>Click me second</button>
+	<button>Click me third</button>
+	<button>Click me last!</button>
+
+	</div>
+
+	<footer>
+		Copyright Zomry 2015
+	</footer>
 
 	<script src="screen-lib.js"></script>
+</div>
 </body>
 </html>

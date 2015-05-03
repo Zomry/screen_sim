@@ -1,0 +1,42 @@
+<html>
+<head>
+	<title>Screenreader-test</title>
+	<meta charset="UTF-8">
+	<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" href="demo.css">
+</head>
+
+<body>
+	<header>
+		<nav>
+			<ul>
+				<li><a href="index.html">Manual page</a></li>
+				<li><a href="images.html">Images demo</a></li>
+				<li><a href="form.html">Form demo</a></li>
+				<li><a href="table.html">Table demo</a></li>
+		</nav>
+	</header>
+
+	<div class="clearer" aria-visible="false"></div>
+	<div id="main" role="main">
+
+		<h1>Accessibility demo</h1>
+		<h2>Images</h2>
+
+		<h3>Image with alt-attribute</h3>
+		<img src="a8f962cio.png" alt="Good dancer">
+
+		<h3>Image without alt-attribute</h3>
+		<img src="a8f962cio.png">
+
+		<h3>Image with alt-attribute and longdesc</h3>
+		<img src="a8f962cio.png" alt="Some dancer" longdesc="longdesc.html">
+	</div>
+
+	<footer>
+		Copyright Zomry 2015
+	</footer>
+
+	<script src="screen-lib.js"></script>
+</body>
+</html>

@@ -3,25 +3,11 @@
 
 	<title>Screenreader-test</title>
 	<meta charset="UTF-8">
-	<style>
-		body {
-			background-color: lightblue;
-		}
-
-		:focus {
-			border: 2px dashed red;
-			background-color: pink;
-		}
-
-		#fake-button {
-			background-color: gray;
-			display: inline-block;
-			padding: 15px;
-		}
-	</style>
+	<link rel="stylesheet" type="text/css" href="demo.css">
 </head>
 <body>
 
+<div id="main" role="main">
 	<h1>Accessibility demo</h1>
 	<h2>Images</h2>
 
@@ -44,10 +30,6 @@
 	<a href="#">now</a><br>
 	<a href="#">out</a><br>
 	<a href="#">alright!</a><br>
-	<button>Click me first</button>
-	<button>Click me second</button>
-	<button>Click me third</button>
-	<button>Click me last!</button>
 	<ul>
 		<li>Alt textes</li>
 			<ol>
@@ -61,7 +43,11 @@
 	</ul>
 
 	<div id="fake-button" aria-role="button">Click me!</div>
+	</div>
 
+	<footer>
+		Copyright Zomry 2015 | <a href="manual.html">Manual</a>
+	</footer>
 
 	<script src="screen-lib.js"></script>
 </body>
