@@ -10,3 +10,8 @@ A demo is provided in the .html-pages in the project. Most of the features are d
 Apart from the available time, I faced two technical limitations (browser-level):
 1. It is not possible to focus on a disabled editable field (input / areafield).
 2. If you focus on a label connected with an editable field, it will not focus on the label, but on the editable field. This shouldn't be a problem.
+
+##What is not (yet) included?
+* Only a limited amount of elements are supported, so the others are not
+* Aria-support was not included, or at least not complete
+* Navigation through landmarks is not part of the demo

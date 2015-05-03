@@ -1,4 +1,9 @@
 window.onload = function() {
+	var options = {
+		voiceOn: true, 
+		volume: 1.0
+	};
+
 	var descriptionDetails = {
 		location: "longdesc.html",
 		allowed: true
