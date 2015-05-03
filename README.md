@@ -1,4 +1,4 @@
-# screen_sim
+# Screen reader simulation
 ##Original aim
 The internet allows the visual impaired to access information that they couldn't before. The assistive technology (JAWS, NVDA, Narrator and VoiceOver, to name a few) is getting better and more useful. They integrate a few open standards: e.g. HTML5 semantics, WAI-ARIA.
 I notice that many developers find it difficult to get started with testing for screen readers because they do not have an idea how it might work. While I'm not an expert in the field, I saw a possibility to create a proof--of-concept screenreader for a school project. This project aims to create a simple - hence incomplete! - simulator of a screen reader in a web context. Inspired by NVDA/VoiceOver, the script uses the experimental speechSynthesis-feature of Chrome 33+. While the script might work in Firefox and Safari, I did not actively test for it.
